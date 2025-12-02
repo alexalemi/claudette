@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Ask Claude
+Comment=Start a new Claude conversation
+Exec=/home/alemi/.local/bin/ask-claude
+Icon=web-browser
+Terminal=false
+Categories=Utility;
