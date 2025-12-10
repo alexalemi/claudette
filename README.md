@@ -1,8 +1,10 @@
 # claudette
 
-A simple bash command that converts natural language to bash commands using Claude Haiku.
+Simple bash utilities powered by Claude Haiku.
 
-## Usage
+## c - Natural Language to Bash
+
+Converts natural language to bash commands.
 
 ```bash
 c list all files larger than 100MB
@@ -12,6 +14,16 @@ c show disk usage sorted by size
 
 The command will be shown on an editable prompt - modify it if needed, then press Enter to execute. The command is saved to your bash history.
 
+## q - Quick Questions
+
+Ask Claude Haiku a quick question from the command line.
+
+```bash
+q what is the capital of France
+q how do I reverse a string in python
+q explain the difference between TCP and UDP
+```
+
 ## Requirements
 
 - `curl`
@@ -20,37 +32,37 @@ The command will be shown on an editable prompt - modify it if needed, then pres
 
 ## Installation
 
-1. Copy `_c_helper` to `~/.local/bin/` and make it executable:
+Run the install script:
 
 ```bash
-cp _c_helper ~/.local/bin/
-chmod +x ~/.local/bin/_c_helper
+./install.sh
 ```
 
-2. Add the following to your `~/.bashrc`:
+This copies the helper scripts to `~/.local/bin/` and prints the shell functions to add to your `~/.bashrc`:
 
 ```bash
 # Natural language to bash command using Claude
 c() {
     local cmd
     cmd=$("$HOME/.local/bin/_c_helper" "$@") || return 1
-
-    # Let user edit the command
     read -e -i "$cmd" -p "$ " edited_cmd
-
-    # Add to history and execute
     history -s "$edited_cmd"
     eval "$edited_cmd"
 }
+
+# Ask a question to Claude Haiku
+q() {
+    "$HOME/.local/bin/_q_helper" "$@"
+}
 ```
 
-3. Set your Anthropic API key:
+Set your Anthropic API key:
 
 ```bash
 export ANTHROPIC_API_KEY="your-api-key"
 ```
 
-4. Reload your shell:
+Reload your shell:
 
 ```bash
 source ~/.bashrc

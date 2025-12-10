@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+    echo "Error: ANTHROPIC_API_KEY not set" >&2
+    exit 1
+fi
+
+query="$*"
+if [ -z "$query" ]; then
+    echo "Usage: q <question>" >&2
+    exit 1
+fi
+
+# Build JSON payload using jq for proper escaping
+payload=$(jq -n --arg query "$query" '{
+    model: "claude-haiku-4-5",
+    max_tokens: 1024,
+    messages: [{
+        role: "user",
+        content: $query
+    }]
+}')
+
+response=$(curl -s https://api.anthropic.com/v1/messages \
+    -H "Content-Type: application/json" \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -d "$payload")
+
+# Extract answer using jq
+answer=$(echo "$response" | jq -r '.content[0].text // empty')
+
+if [ -z "$answer" ]; then
+    echo "Error: Failed to get response" >&2
+    echo "$response" >&2
+    exit 1
+fi
+
+echo "$answer"
