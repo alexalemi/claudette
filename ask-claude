@@ -1,6 +1,28 @@
 #!/bin/bash
-# Usage: ask-claude [--code|-c] "Your question here"
-#   --code, -c  Open in Claude Code web instead of regular Claude
+#
+# ask-claude - Open a question in Claude AI via your web browser
+#
+# DESCRIPTION:
+#   A utility script to quickly ask Claude AI questions from the command line.
+#   Opens either Claude (claude.ai) or Claude Code (claude.ai/code) in your
+#   default browser with your question pre-filled.
+#
+# USAGE:
+#   ask-claude [OPTIONS] [QUESTION]
+#
+# OPTIONS:
+#   -c, --code    Open in Claude Code instead of regular Claude
+#
+# EXAMPLES:
+#   ask-claude "What is the capital of France?"
+#   ask-claude -c "Help me debug this Python script"
+#   ask-claude                                        # Opens GUI prompt
+#
+# DEPENDENCIES:
+#   - jq (for URL encoding)
+#   - xdg-open (for opening browser on Linux)
+#   - zenity (optional, for GUI prompt when no question provided)
+#
 
 # Parse flags
 use_code=false
