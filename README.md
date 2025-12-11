@@ -74,14 +74,19 @@ A quick launcher to start a new Claude conversation in your browser with a quest
 
 ### Usage
 
-- Run from terminal: `ask-claude "Your question here"`
-- Run without arguments to get a GUI prompt
-- Use keyboard shortcut (CTRL+ALT+C) for quick access
+```bash
+ask-claude "Your question here"           # Opens claude.ai/new
+ask-claude --code "Help me with this"     # Opens Claude Code web
+ask-claude -c "Debug this error"          # Same as --code
+ask-claude                                # Opens GUI prompt
+```
+
+Use keyboard shortcut (CTRL+ALT+C) for quick access.
 
 ### Requirements
 
 - `zenity` (for GUI input dialog)
-- `xdotool` (for typing automation)
+- `jq` (for URL encoding)
 - A web browser
 
 ### Installation

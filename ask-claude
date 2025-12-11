@@ -1,23 +1,27 @@
 #!/bin/bash
-# Save as: ~/bin/claude-ask
-# Usage: claude-ask "Your question here"
+# Usage: ask-claude [--code|-c] "Your question here"
+#   --code, -c  Open in Claude Code web instead of regular Claude
 
-PROMPT="$*"
+# Parse flags
+use_code=false
+while [[ "$1" == -* ]]; do
+    case "$1" in
+        -c|--code) use_code=true; shift ;;
+        *) shift ;;
+    esac
+done
 
-if [ -z "$PROMPT" ]; then
-    # If no argument, prompt for input
-    PROMPT=$(zenity --entry --title="Ask Claude" --text="Enter your question:" --width=400 2>/dev/null)
-    [ -z "$PROMPT" ] && exit 0
+# Get question from argument or prompt
+question="$*"
+if [ -z "$question" ]; then
+    question=$(zenity --entry --title="Ask Claude" --text="Enter your question:" --width=400 2>/dev/null)
+    [ -z "$question" ] && exit 0
 fi
 
-# Open Claude in default browser
-xdg-open "https://claude.ai/new" &
-
-# Wait for the page to load and focus the input
-sleep 3
-
-# Type the prompt and submit
-xdotool type --delay 12 "$PROMPT"
-sleep 0.2
-xdotool key Return
-
+# URL-encode the question and open browser
+encoded=$(printf '%s' "$question" | jq -sRr @uri)
+if $use_code; then
+    xdg-open "https://claude.ai/code?q=${encoded}"
+else
+    xdg-open "https://claude.ai/new?q=${encoded}"
+fi
