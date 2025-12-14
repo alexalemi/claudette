@@ -19,6 +19,7 @@ cat <<'EOF'
 # Natural language to bash command using Claude
 c() {
     local cmd
+    history -s "c $*"
     cmd=$("$HOME/.local/bin/_c_helper" "$@") || return 1
     read -e -i "$cmd" -p "$ " edited_cmd
     history -s "$edited_cmd"
